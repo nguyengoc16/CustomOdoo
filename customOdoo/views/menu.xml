@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_hospital_root"
+              name="Hospital"
+              sequence="10"/>
+
+    <menuitem id="menu_patient_root"
+              name="Patients"
+              parent="menu_hospital_root"
+              sequence="10"/>
+
+    <menuitem id="menu_patient"
+              name="Patients"
+              parent="menu_patient_root"
+              action="action_patient"
+              sequence="10"/>
+
+    <menuitem id="menu_doctor_root"
+              name="Doctors"
+              parent="menu_hospital_root"
+              sequence="10"/>
+
+    <menuitem id="menu_doctor"
+              name="Doctors"
+              parent="menu_doctor_root"
+              action="action_hospital_doctor"
+              sequence="10"/>
+
+    <menuitem id="menu_male_patients"
+              name="Male Patients"
+              parent="menu_patient_root"
+              action="action_male_patients"
+              sequence="10"/>
+
+    <menuitem id="menu_female_patients"
+              name="Female Patients"
+              parent="menu_patient_root"
+              action="action_female_patients"
+              sequence="10"/>
+
+    <menuitem id="menu_kids"
+              name="Kid"
+              parent="menu_patient_root"
+              action="action_kid"
+              sequence="10"/>
+
+    <menuitem id="menu_appointment_root"
+              name="Appointments"
+              parent="menu_hospital_root"
+              sequence="0"/>
+
+    <menuitem id="menu_appointment"
+              name="Appointments"
+              parent="menu_appointment_root"
+              action="action_appointment"
+              sequence="10"/>
+
+    <menuitem id="menu_create_appointment"
+              name="Create Appointment"
+              parent="menu_appointment_root"
+              action="action_create_appointment"
+              sequence="10"/>
+
+    <menuitem id="menu_search_appointment"
+              name="Search Appointment"
+              parent="menu_appointment_root"
+              action="action_search_appointment"
+              sequence="10"/>
+
+
+    <menuitem id="menu_report_root"
+              name="Reporting"
+              parent="menu_hospital_root"
+              sequence="10"/>
+
+    <menuitem id="menu_report"
+              name="Report Appointment "
+              parent="menu_report_root"
+              action="action_report_appointment"
+              sequence="10"/>
+
+    <menuitem id="menu_report_all_patients"
+              name="Report All Patients "
+              parent="menu_report_root"
+              action="action_report_all_patients"
+              sequence="10"/>
+
+    <menuitem id="menu_configuration_root"
+              name="Configuration"
+              parent="menu_hospital_root"
+              sequence="100"/>
+
+    <menuitem id="menu_department"
+              name="Department"
+              parent="menu_configuration_root"
+              action="action_department"
+              sequence="10"/>
+
+    <menuitem id="menu_medicine"
+              name="Medicine"
+              parent="menu_configuration_root"
+              action="action_medicine"
+              sequence="10"/>
+
+    <menuitem id="menu_tax"
+              name="Tax"
+              parent="menu_configuration_root"
+              action="action_tax"
+              sequence="10"/>
+
+</odoo>

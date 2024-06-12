@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_create_appointments" model="ir.actions.server">
+        <field name="name">Create Appointment</field>
+        <field name="model_id" ref="om_hospital.model_hospital_patient"/>
+        <field name="binding_model_id" ref="om_hospital.model_hospital_patient"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+            if record:
+                action_values = env.ref('om_hospital.action_create_appointment').sudo().read()[0]
+                action_values.update({'context': env.context})
+                action = action_values
+        </field>
+    </record>
+
+    <record id="view_patient_kanban" model="ir.ui.view">
+        <field name="name">hospital.patient.kanban</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <kanban default_order="id asc">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="age"/>
+                <field name="gender"/>
+                <field name="note"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <ul>
+                                    <li>
+                                        Name:
+                                        <field name="name"/>
+                                    </li>
+                                    <li>
+                                        Age:
+                                        <field name="age"/>
+                                    </li>
+                                    <li>
+                                        Gender:
+                                        <field name="gender"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_patient_tree" model="ir.ui.view">
+        <field name="name">hospital.patient.tree</field>
+        <field name="model">hospital.patient</field>
+
+        <field name="arch" type="xml">
+            <tree expand="1">
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="responsible_id"/>
+                <field name="age"/>
+                <field name="gender"/>
+                <field name="note"/>
+                <field name="appointment_count"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="view_patient_form" model="ir.ui.view">
+        <field name="name">hospital.patient.form</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <form string="Operation Templates">
+                <header>
+                    <!--button's name = name of a function of its models-->
+                    <!--button's type = {object, action}. type='object' = call the function-->
+                    <button id="button_confirm" name="action_confirm" string="Confirm" class="btn-primary"
+                            states="draft" type="object"
+                            confirm="Co chac chan chua? :?"/> <!--  can only be seen in draft-->
+                    <button id="button_done" name="action_done" string="Mark as done" class="btn-primary"
+                            states="confirm" type="object"/>
+                    <button id="button_draft" name="action_draft" string="Set to draft" class="btn-primary"
+                            states="cancel" type="object"/>
+                    <button id="button_cancel" name="action_cancel" string="Cancel"
+                            states="confirm,draft,done" type="object"
+                            confirm="Co chac chan chua? :?"/>
+                    <!--options="{'clickable':'1'} in field to let states be clickable-->
+                    <button id="button_confirm" name="%(action_create_appointment)d" string="Create Appointment"
+                            class="btn-primary"
+                            type="action"/>
+
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,done,confirm"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_appointment" type="object" icon='fa-solid fa-gift' class="oe_stat_button">
+                            <div class="o_stat_info">
+                                <field name="appointment_count" class="o_stat_value"/>
+                            </div>
+                            <span class="o_stat_text">Appointments</span>
+                        </button>
+                    </div>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_tittle">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="age"/>
+                            <field name="responsible_id"/>
+                        </group>
+                        <group>
+                            <field name="appointment_count"/>
+                            <field name="gender"
+                                   invisible="context.get('hide_gender')"/> <!--invisible={0:False, 1:True}-->
+                            <field name="note"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Appointments" name="appointments">
+                            <field name="hospital_appointment_ids" readonly="1">
+                                <tree create="0" delete="0" edit="0">
+                                    <field name="name"/>
+                                    <field name="hospital_patient_id"/>
+                                    <field name="gender"/>
+                                    <field name="age"/>
+                                    <field name="date_appointment"/>
+                                    <field name="date_checkup"/>
+                                    <field name="appointment_count" optional="hide"/>
+                                    <field name="note" optional="show"/>
+                                    <field name="state"/>
+                                </tree>
+
+                                <form>
+                                    <div class="oe_tittle">
+                                        <h1>
+                                            <field name="name" readonly="1"/>
+                                        </h1>
+                                    </div>
+                                    <group>
+                                        <group>
+                                            <field name="hospital_patient_id"/>
+                                            <field name="age"/>
+                                            <field name="appointment_count"/>
+                                            <field name="date_appointment"/>
+                                            <field name="hospital_doctor_id"/>
+                                        </group>
+                                        <group>
+                                            <field name="gender" readonly="1"
+                                                   force_save="1"/><!--  use force save in case if readonly is true, to save the attr-->
+                                            <field name="date_checkup"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_patient_search" model="ir.ui.view">
+        <field name="name">hospital.patient.search</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <search string="Patients">
+                <field name="name"/>
+                <field name="note"/>
+
+                <group expand="0" string="Filters">
+                    <filter string="Male" name="male" domain="[('gender','=','male')]"/>
+                    <separator/>
+                    <filter string="Female" name="female" domain="[('gender','=','female')]"/>
+                    <filter string="others" name="other" domain="[('gender','=','other')]"/>
+
+                </group>
+
+                <group expand="1" string="Group by">
+                    <filter string="Gender" name="gender" context="{'group_by':'gender'}"/>
+                    <filter string="Age" name="age" context="{'group_by':'age'}"/>
+                    <filter string="Responsible" name="responsible" context="{'group_by':'responsible_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hospital.patient</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <!--search_default_"name of the filter"-->
+        <field name="context">{'search_default_male':1, 'search_default_responsible':1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                create the first patient
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

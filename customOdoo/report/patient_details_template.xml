@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_patient_detail">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+
+                    <!-- Header -->
+                    <header style="text-align: center; padding: 10px 0; border-bottom: 2px solid #ddd; position: fixed; top: 0; width: 100%; background-color: white; z-index: 1000;">
+                        <h1 style="font-size: 24px; color: #007bff;">Patient Report</h1>
+                        <p style="font-size: 14px; color: #555;">Generated on</p>
+                    </header>
+
+                    <!-- Content with adjusted top padding to account for the fixed header -->
+                    <div class="page" style="font-family: 'Arial', sans-serif; padding: 100px 20px 20px 20px;">
+                        <div class="oe_structure"/>
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <table class="table table-condensed"
+                                       style="border: 3px solid black !important; margin-bottom: 20px;">
+                                    <tr>
+                                        <td width="40%" style="padding: 10px; vertical-align: top;">
+                                            <p style="text-align:center;padding-top:10px;">
+                                                <img t-if="not o.image"
+                                                     t-att-src="'/web/static/src/img/placeholder.png'" height="140"
+                                                     border="1" width="120" style="border-radius: 10px;"/>
+                                                <img t-if="o.image"
+                                                     t-att-src="'data:image/png;base64,' + o.image.decode('utf-8')"
+                                                     height="140" border="1" width="120" style="border-radius: 10px;"/>
+                                            </p>
+                                        </td>
+                                        <td width="60%" style="padding: 10px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                                   style="background-color: white; width: 100%; padding: 0; border-collapse:separate;">
+                                                <tr>
+                                                    <td colspan="3" class="text-center"
+                                                        style="font-size: 18px; font-weight: bold; padding-bottom: 10px;">
+                                                        <span t-field="o.name"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 30%; padding: 5px 0;">
+                                                        <strong>Age:</strong>
+                                                    </td>
+                                                    <td style="width: 65%; padding: 5px 0;">
+                                                        <span t-field="o.age"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 30%; padding: 5px 0;">
+                                                        <strong>Reference:</strong>
+                                                    </td>
+                                                    <td style="width: 65%; padding: 5px 0;">
+                                                        <span t-field="o.reference"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <br/>
+
+                        <t t-if="o.hospital_appointment_ids">
+                            <h3 style="text-align: center; margin-bottom: 10px; color: #007bff;">Appointment Details
+                            </h3>
+                            <table class="table table-sm o_main_table" name="appointment"
+                                   style="border: 1px solid #ddd;">
+                                <thead style="background-color: #f9f9f9;">
+                                    <tr>
+                                        <th name="th_reference" class="text-left"
+                                            style="padding: 8px; border-bottom: 1px solid #ddd;">
+                                            <span>Reference</span>
+                                        </th>
+                                        <th name="th_age" class="text-left"
+                                            style="padding: 8px; border-bottom: 1px solid #ddd;">
+                                            <span>Age</span>
+                                        </th>
+                                        <th name="th_doctor" class="text-left"
+                                            style="padding: 8px; border-bottom: 1px solid #ddd;">
+                                            <span>Doctor</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="appointment_count" t-value="0"/>
+                                    <t t-foreach="o.hospital_appointment_ids" t-as="line">
+                                        <t t-set="appointment_count" t-value="appointment_count + 1"/>
+                                        <tr>
+                                            <td style="padding: 8px; border-bottom: 1px solid #ddd;">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <td style="padding: 8px; border-bottom: 1px solid #ddd;">
+                                                <span t-field="line.age"/>
+                                            </td>
+                                            <td style="padding: 8px; border-bottom: 1px solid #ddd;">
+                                                <span t-field="line.hospital_doctor_id.doctor_name"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="font-weight: bold; background-color: #f9f9f9;">
+                                        <td colspan="2" style="padding: 8px; border-top: 1px solid #ddd;">
+                                            Total Appointments
+                                        </td>
+                                        <td style="padding: 8px; border-top: 1px solid #ddd;">
+                                            <t t-esc="appointment_count"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </t>
+                    </div>
+
+                    <!-- Footer -->
+                    <footer style="text-align: center; padding: 10px 0; border-top: 2px solid #ddd; position: fixed; bottom: 0; width: 100%; background-color: white;">
+                        <p style="font-size: 12px; color: #555;">Hospital Name | Address | Contact</p>
+                    </footer>
+
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

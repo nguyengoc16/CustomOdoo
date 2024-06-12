@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_all_patients_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page" style="padding: 20px; font-family: Arial, sans-serif;">
+                    <div class="oe_structure"/>
+                    <h1 class="report-heading"
+                        style="text-align: center; font-size: 24px; color: #007BFF; margin-bottom: 20px; border-bottom: 2px solid #007BFF; padding-bottom: 10px;">
+                        ALL PATIENTS
+                    </h1>
+
+
+                    <table class="table table-bordered mt32">
+                        <thead>
+                            <tr>
+                                <th name="th_name" class="text-left">
+                                    <span>Patient Name</span>
+                                </th>
+                                <th name="th_gender" class="text-left">
+                                    <span>Gender</span>
+                                </th>
+                                <th name="th_age" class="text-left">
+                                    <span>Age</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <t t-foreach="docs" t-as="line">
+                            <tr>
+                                <td>
+                                    <span t-field="line.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.gender"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.age"/>
+                                </td>
+                            </tr>
+                        </t>
+
+                    </table>
+                    <div class="footer" style="text-align: center; color: #888; margin-top: 20px; font-size: 12px;">
+                        <p>Generated on
+                            <t t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/>
+                            by Odoo 16
+                        </p>
+                    </div>
+                </div>
+            </t>
+
+        </t>
+    </template>
+
+</odoo>

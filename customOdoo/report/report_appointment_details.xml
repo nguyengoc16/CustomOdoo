@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_appointment_details">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page" style="padding: 20px; font-family: Arial, sans-serif;">
+                    <div class="oe_structure"/>
+                    <h1 class="report-heading"
+                        style="text-align: center; font-size: 24px; color: #007BFF; margin-bottom: 20px; border-bottom: 2px solid #007BFF; padding-bottom: 10px;">
+                        Appointment Details
+                    </h1>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                        <tr class="report-row" style="border-bottom: 1px solid #ddd; background-color: #f9f9f9;">
+                            <td class="report-label" style="padding: 12px; font-weight: bold; color: #555; width: 30%;">
+                                Patient
+                            </td>
+                            <td class="report-value" style="padding: 12px;">
+                                <t t-if="form.get('hospital_patient_id')">
+                                    <t t-esc="form['hospital_patient_id'][1]"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr class="report-row" style="border-bottom: 1px solid #ddd; background-color: #fff;">
+                            <td class="report-label" style="padding: 12px; font-weight: bold; color: #555;">Date From
+                            </td>
+                            <td class="report-value" style="padding: 12px;">
+                                <t t-if="form.get('date_from')">
+                                    <t t-esc="form['date_from']"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr class="report-row" style="border-bottom: 1px solid #ddd; background-color: #f9f9f9;">
+                            <td class="report-label" style="padding: 12px; font-weight: bold; color: #555;">Date To</td>
+                            <td class="report-value" style="padding: 12px;">
+                                <t t-if="form.get('date_to')">
+                                    <t t-esc="form['date_to']"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="table table-bordered"
+                           style="width: 100%; border-collapse: collapse; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                        <thead>
+                            <tr style="background-color: #007BFF; color: white;">
+                                <th name="th_reference" class="text-left"
+                                    style="padding: 12px; text-align: left; font-size: 16px;">
+                                    <span>Reference</span>
+                                </th>
+                                <th name="th_name" class="text-left"
+                                    style="padding: 12px; text-align: left; font-size: 16px;">
+                                    <span>Note</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="appointment_count" t-value="0"/>
+                            <t t-foreach="appointments" t-as="line">
+                                <t t-set="appointment_count" t-value="appointment_count + 1"/>
+                                <tr style="border-bottom: 1px solid #ddd; background-color: #fff;">
+                                    <td style="padding: 12px;">
+                                        <span t-esc="line['name']"/>
+                                    </td>
+                                    <td style="padding: 12px;">
+                                        <span t-esc="line['note']"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <div class="footer" style="text-align: center; color: #888; margin-top: 20px; font-size: 12px;">
+                        <p>Generated on
+                            <t t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/>
+                            by Odoo 16
+                        </p>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
